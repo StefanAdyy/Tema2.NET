@@ -53,10 +53,10 @@ namespace Project.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/get-grades-by-student-id")]
-        public ActionResult<List<Grade>> GetGrades([FromBody] StudentGradesRequest studentGradesRequest)
+        [HttpGet("/get-grades-by-student-id/{studentId}/{courseId}")]
+        public ActionResult<List<Grade>> GetGrades(int studentId, int courseId)
         {
-            var results = studentService.GetGradesById(studentGradesRequest.StudentId, studentGradesRequest.CourseType);
+            var results = studentService.GetGradesById(studentId, (DataLayer.Enums.CourseType) courseId);
 
             return Ok(results);
         }
