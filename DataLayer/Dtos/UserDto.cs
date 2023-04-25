@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,9 @@ namespace DataLayer.Dtos
 {
     public class UserDto
     {
+        public int? Id { get; set; } = null;
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
     }
 }
