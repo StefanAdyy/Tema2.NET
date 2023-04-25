@@ -53,6 +53,14 @@ namespace Project.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/get-grades-by-student-id")]
+        public ActionResult<List<Grade>> GetGrades([FromBody] StudentGradesRequest studentGradesRequest)
+        {
+            var results = studentService.GetGradesById(studentGradesRequest.StudentId, studentGradesRequest.CourseType);
+
+            return Ok(results);
+        }
+
         [HttpPatch("edit-name")]
         public ActionResult<bool> GetById([FromBody] StudentUpdateDto studentUpdateModel)
         {
