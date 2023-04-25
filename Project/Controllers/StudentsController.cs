@@ -2,7 +2,10 @@
 using Core.Services;
 using DataLayer.Dtos;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Project.Controllers
 {
@@ -54,11 +57,27 @@ namespace Project.Controllers
         }
 
         [HttpGet("/get-grades-by-student-id/{studentId}/{courseId}")]
+        [Authorize]
         public ActionResult<List<Grade>> GetGrades(int studentId, int courseId)
         {
-            var results = studentService.GetGradesById(studentId, (DataLayer.Enums.CourseType) courseId);
+            var currentUser = HttpContext.User;
+            var results = studentService.GetGradesById(studentId, (DataLayer.Enums.CourseType)courseId);
 
-            return Ok(results);
+            if (currentUser.IsInRole("Student"))
+            {
+                var loggedStudentId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!loggedStudentId.Equals(studentId.ToString()))
+                {
+                    return Unauthorized();
+                }
+            }
+            else if (!currentUser.IsInRole("Profesor"))
+            {
+                return Unauthorized();
+            }
+
+                return Ok(results);
         }
 
         [HttpPatch("edit-name")]
